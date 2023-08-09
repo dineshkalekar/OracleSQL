@@ -1,0 +1,194 @@
+select substr('SeedInfotech',5,3)
+from dual;
+
+select first_name,last_name,substr(salary,1,4)
+from HR.employees
+
+select first_name,length(first_name)
+from hr.employees;
+
+select first_name.in str(first_name,'e')
+from HR.employees;
+
+select salary,lpad(salary,10,'&'),rpad(salary,10,'$')
+from HR.employees;
+
+select last_name,
+upper(concat(substr(last_name,1,8),'_us'))
+from HR.employees
+where department_id=60;
+
+
+select first_name,last_name,department_id,salary
+from hr.employees
+order by salary desc ;
+
+select count( * ) from HR.job_history;
+
+select department_id,first_name,last_name,salary,job_id
+from HR.employees
+where job_id like '%REP';
+
+select DISTINCT department_id,job_id
+from hr.employees
+where job_id like 'IT_PROG';
+
+select max(salary)
+from hr.employees;
+
+select COUNT(*)salary
+from hr.employees;
+
+select COUNT(*)country_id
+from hr.countries;
+
+
+SELECT employee_id,department_id,salary,first_name,last_name
+from hr.employees
+order by salary desc
+/
+select count (*)salary
+from HR.employees;
+
+select max(salary)
+from hr.employees
+/
+select min(salary)
+from hr.employees;
+/
+
+select first_name,last_name,department_id,salary,job_id
+from hr.employees;
+
+
+
+// june 23
+select * from HR.employees;
+
+select * from HR.job_history;
+
+select * from HR.departments;
+
+select * from HR.locations;
+
+//union;
+select employee_id,job_id,department_id
+from HR.employees
+union 
+select employee_id,job_id,department_id
+from HR.job_history;
+
+//union all;
+
+select employee_id,job_id,department_id
+from HR.employees
+union all
+select employee_id,job_id,department_id
+from HR.job_history;
+
+//intersect;
+select employee_id,job_id,department_id
+from HR.employees
+intersect
+select employee_id,job_id,department_id
+from HR.job_history;
+
+//minus
+select employee_id,job_id,department_id
+from HR.job_history
+minus
+select employee_id,job_id,department_id
+from HR.employees;
+
+//union without dublicat;
+select employee_id,job_id,department_id
+from HR.employees
+union 
+select employee_id,job_id,department_id
+from HR.job_history;
+
+// intersect take common or same data
+select employee_id,job_id
+from HR.employees
+intersect
+select employee_id,job_id
+from HR.job_history
+
+// minus;
+select employee_id,job_id
+from HR.job_history
+minus
+select employee_id,job_id
+from HR.employees;
+
+//4
+select manager_id,department_id
+from HR.employees
+union all
+select manager_id,department_id
+from HR.departments;
+
+//5
+select manager_id,department_id
+from HR.employees
+union 
+select manager_id,department_id
+from HR.departments;
+
+//6
+select manager_id,department_id
+from HR.employees
+minus
+select manager_id,department_id
+from HR.departments;
+
+//7
+select manager_id,department_id
+from HR.employees
+intersect
+select manager_id,department_id
+from HR.departments;
+
+//8
+select location_id,city
+from HR.locations
+where location_id in (select location_id 
+                      from HR.departments
+                      where (department_id,manager_id) in(select department_id,manager_id
+                                                         from HR.employees
+                                                         intersect
+                                                         select department_id,manager_id
+                                                         from HR.departments));
+                                                         
+ // 9
+select start_date,end_date
+from HR.job_history
+where department_id in (select department_id from HR.employees intersect select department_id from HR.job_history );
+
+
+//10;
+select job_id,hire_date
+from HR.employees
+where department_id in (select department_id from HR.departments intersect select department_id from HR.employees);
+
+//10 
+select department_id,start_date
+from HR.job_history
+where department_id in (select department_id from HR.departments intersect select department_id from HR.employees);
+
+//11
+select job_id,job_title
+from HR.jobs
+where job_id in (select job_id from HR.employees intersect select job_id from HR.departments);
+
+Select job_id,job_title
+from HR.jobs
+where (job_id)in(select job_id from HR.job_history
+                        where(department_id)in(select department_id from HR.employees intersect select department_id from HR.departments) );
+
+ Select j.job_id,j.job_title
+from HR.jobs j join HR.job_history h
+on(j.job_id=h.job_id)
+where h.department_id in (select department_id from HR.employees intersect select department_id from HR.departments)
+                  
+
